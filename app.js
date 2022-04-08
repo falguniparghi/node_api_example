@@ -1,8 +1,10 @@
 const express = require("express");
-const feedRoutes = require('./routes/feed');
-const authRoutes = require('./routes/auth');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const { graphqlHTTP } = require('express-graphql');
+const schema = require('./graphql/schema');
+const resolver = require('./graphql/resolver');
+const auth = require('./middleware/is-auth')
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,11 +22,28 @@ app.use((error, req, res, next) => {
     res.status(status).json(message);
   });
 
+app.use(auth);
 
-app.use('/feed', feedRoutes);
-app.use('/auth', authRoutes);
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: resolver,
+    graphiql: true,
+    formatError(err){
+        if(!err.originalError) {
+            return err;
+        }
+        const data = err.originalError.data;
+        const message = err.message || 'Invalid Arguments'
+        const statusCode = err.originalError.code || '500'
+         return {
+             data : data,
+             message: message,
+             status : statusCode
+         }
+    }
+}));
 
-mongoose.connect ('uri').then(result => {
+mongoose.connect ('mongodb+srv://falguniparghi:8aUwV9B1Ll3CAn55@cluster0.6drto.mongodb.net/feeds?retryWrites=true&w=majority').then(result => {
     app.listen(8080);
 }
 
