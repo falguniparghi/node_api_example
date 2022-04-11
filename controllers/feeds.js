@@ -57,13 +57,13 @@ exports.addPosts = async (req, res, next) => {
         creator1 = user;
         user.posts.push(postObj);
         const result = await user.save();
-        if (result) {
             res.status(200).json({
                 message: 'Post created successfully!',
                 post: postObj,
                 creator: { name: creator1.name, id: creator1._id }
             })
-        }
+
+        return result;
     } catch (error) {
         next(error)
     }

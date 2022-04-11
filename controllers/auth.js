@@ -61,18 +61,14 @@ exports.login = async (req, res, next) => {
 
         const token = await jwt.sign({ email: loggedInUser.email, userId: loggedInUser._id }, 'secretkey', { expiresIn: '1h' });
 
-        if(token) {
-            res.status('200').json({
-                'message': 'Login Success',
-                'token': token
-            });
-        } else {
-            res.statusCode = 401;
-            throw new Error('Authorization failed');
-        }
-        
+        res.status('200').json({
+            'message': 'Login Success',
+            'token': token
+        });
+        return;
     } catch (err) {
         err.statusCode = 500
         next(err);
+        return err;
     }
 };

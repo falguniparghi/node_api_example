@@ -2,18 +2,21 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.2",
+    "chai": "^4.3.6",
     "express": "^4.17.3",
     "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.2.2",
     "mongoose": "^6.2.9",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "sinon": "^13.0.1"
   },
   "name": "node_api-example",
   "version": "1.0.0",
   "description": "Node API Example with Mongo DB",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --timeout 15000",
     "start": "nodemon app.js"
   },
   "repository": {
